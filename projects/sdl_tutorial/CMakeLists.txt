@@ -4,16 +4,6 @@ set(PROJ_NAME "HandmadeHero")
 
 project (${PROJ_NAME})
 
-find_package(SDL2 REQUIRED)
-STRING(REGEX REPLACE "/SDL2" "" SDL2_INCLUDE_DIRS ${SDL2_INCLUDE_DIRS})
-include_directories(${PROJ_NAME} ${SDL2_INCLUDE_DIRS})
-
-# Courtesy: https://stackoverflow.com/questions/37817717/sdl2-library-not-found-with-make-but-with-cmake
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../engine/cmake)
-find_package(SDL2_Image REQUIRED)
-STRING(REGEX REPLACE "/SDL2" "" SDL2_IMAGE_INCLUDE_DIR ${SDL2_IMAGE_INCLUDE_DIR})
-include_directories(${SDL2_IMAGE_INCLUDE_DIR})
-
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../../engine/src)
 
 # Gather list of header and source files for compilation
@@ -28,5 +18,5 @@ target_include_directories (${PROJ_NAME}
     PUBLIC ${SFML_INCLUDE_DIR}
 )
 
-target_link_libraries (${PROJ_NAME} engine ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES})
+target_link_libraries (${PROJ_NAME} engine)
 
