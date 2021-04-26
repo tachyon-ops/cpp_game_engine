@@ -17,16 +17,15 @@ include_directories(${SDL2_IMAGE_INCLUDE_DIR})
 
 # Gather list of header and source files for compilation
 file(GLOB_RECURSE MAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/src/Engine.cpp)
-file(GLOB_RECURSE CPP_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/**/.cpp)
-file(GLOB_RECURSE HPP_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/**/.hpp)
-file(GLOB_RECURSE HPP_FILES2 ${CMAKE_CURRENT_SOURCE_DIR}/src/Engine.hpp)
+file(GLOB_RECURSE CPP_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/**/.cpp)
+file(GLOB_RECURSE HPP_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp ${CMAKE_CURRENT_SOURCE_DIR}/src/**/.hpp)
 
 set(ENGINE_INCLUDES ${CMAKE_CURRENT_LIST_DIR}/src/Engine.hpp)
 
-add_library(engine SHARED ${MAIN_FILE} ${CPP_FILES} ${HPP_FILES} ${HPP_FILES2})
+add_library(engine SHARED ${MAIN_FILE} ${CPP_FILES} ${HPP_FILES})
 
-target_link_libraries(engine ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES})
-target_include_directories(engine PUBLIC ${HPP_FILES} ${HPP_FILES2} ${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIR})
+target_link_libraries(engine ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARY})
+target_include_directories(engine PUBLIC ${HPP_FILES} ${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIR})
 
 set(SDL2_LIB_FILE ${SDL2_LIBRARY})
 STRING(REGEX REPLACE "-framework Cocoa" "" SDL2_LIB_FILE ${SDL2_LIB_FILE})
@@ -34,7 +33,7 @@ STRING(REGEX REPLACE "-framework Cocoa" "" SDL2_LIB_FILE ${SDL2_LIB_FILE})
 set(LIB_OUT ${PROJECT_BINARY_DIR}/bin)
 add_custom_command(
     TARGET engine POST_BUILD
-    COMMAND mkdir ${LIB_OUT}
+    COMMAND mkdir -p ${LIB_OUT}
 )
 
 

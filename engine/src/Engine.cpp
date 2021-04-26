@@ -13,16 +13,16 @@ bool Engine::Init() {
   }
 
   // https://stackoverflow.com/questions/51643442/sdl2-image-img-init-returns-0-with-img-geterror-being-empty
-  // int imgFlags = IMG_INIT_JPG | IMG_INIT_PNG;
-  // int initError = IMG_Init(imgFlags);
-  // if (initError == imgFlags) {
-  //   std::cout << "SDL_image initialized" << std::endl;
-  // } else {
-  //   std::cerr << "Failed to initialize SDL_image" << std::endl;
-  //   std::cerr << "Return value: " << initError << std::endl;
-  //   std::cerr << "Error flags: " << IMG_GetError() << std::endl;
-  //   return 3;
-  // }
+  int imgFlags = IMG_INIT_JPG | IMG_INIT_PNG;
+  int initError = IMG_Init(imgFlags);
+  if (initError == imgFlags) {
+    std::cout << "SDL_image initialized" << std::endl;
+  } else {
+    std::cerr << "Failed to initialize SDL_image" << std::endl;
+    std::cerr << "Return value: " << initError << std::endl;
+    std::cerr << "Error flags: " << IMG_GetError() << std::endl;
+    return m_IsRunning = false;
+  }
 
   m_Window = SDL_CreateWindow(
       "Hello World!", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
@@ -56,16 +56,19 @@ void Engine::ShowWindow() {
 }
 
 void Engine::Render() {
-  //
-  SDL_RenderClear(m_Renderer);
   SDL_SetRenderDrawColor(m_Renderer, 255, 255, 255, 255);
+  SDL_RenderClear(m_Renderer);
   SDL_RenderPresent(m_Renderer);
 };
 
 void Engine::Events() {
-  //
   SDL_Event event;
   SDL_PollEvent(&event);
+  switch (event.type) {
+  case SDL_QUIT:
+    Quit();
+    break;
+  }
   if (event.type == SDL_QUIT) {
     m_IsRunning = false;
   }
@@ -89,6 +92,4 @@ bool Engine::Clean() {
   return true;
 };
 
-void Engine::Quit(){
-    //
-};
+void Engine::Quit() { m_IsRunning = false; };
