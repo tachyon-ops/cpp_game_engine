@@ -18,5 +18,13 @@ target_include_directories (${PROJ_NAME}
     PUBLIC ${SFML_INCLUDE_DIR}
 )
 
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
+add_custom_command(
+    TARGET ${PROJ_NAME} POST_BUILD
+    COMMAND cp -rf
+        $ENV{LIB_PATH}
+        ${PROJECT_BINARY_DIR}
+)
+
 target_link_libraries (${PROJ_NAME} engine)
 
