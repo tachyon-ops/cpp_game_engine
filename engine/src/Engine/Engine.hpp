@@ -2,6 +2,7 @@
 #define ENGINE_ENGINE_H
 
 #include "common.hpp"
+#include "Graphics/TextureManager.hpp"
 
 #define SCREEN_WIDTH 960
 #define SCREEN_HEIGHT 640
@@ -9,7 +10,6 @@
 // i.e. f_void_t is a type:
 // function pointer taking one void argument, returning void
 typedef void (*callback)();
-// void callback(){};
 
 class Engine {
 public:
@@ -18,7 +18,7 @@ public:
   };
 
   bool Init(callback f = nullptr);
-  bool Clean();
+  bool Clean(callback f = nullptr);
   void Quit();
 
   void ShowWindow();
@@ -34,6 +34,7 @@ private:
   Engine() {
     m_Window = nullptr;
     m_Renderer = nullptr;
+    m_firstRun = true;
   };
 
   bool m_IsRunning;
@@ -42,6 +43,8 @@ private:
   SDL_Renderer *m_Renderer;
 
   static Engine *s_Instance;
+
+  bool m_firstRun;
 };
 
 #endif

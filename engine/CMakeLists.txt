@@ -23,19 +23,12 @@ STRING(REGEX REPLACE "/SDL2" "" SDL2_IMAGE_INCLUDE_DIR ${SDL2_IMAGE_INCLUDE_DIR}
 include_directories(${SDL2_IMAGE_INCLUDE_DIR})
 
 # Gather list of header and source files for compilation
-# file(GLOB_RECURSE CPP_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/**/*.cpp)
-# file(GLOB_RECURSE HPP_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp ${CMAKE_CURRENT_SOURCE_DIR}/src/**/*.hpp)
+file(GLOB_RECURSE CPP_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/**/*.cpp)
+file(GLOB_RECURSE HPP_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp ${CMAKE_CURRENT_SOURCE_DIR}/src/**/*.hpp)
 
 # MAIN LIB
-add_library(engine SHARED
-    # ${CMAKE_CURRENT_SOURCE_DIR}/src/bla.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Engine/Engine.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Engine/TextureManager.cpp
-)
-target_link_libraries(engine
-    ${SDL2_LIBRARIES}
-    ${SDL2_IMAGE_LIBRARY}
-)
+add_library(engine SHARED ${CPP_FILES})
+target_link_libraries(engine ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARY})
 
 get_filename_component(PARENT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src DIRECTORY)
 
@@ -78,7 +71,10 @@ else()
 endif()
 
 # LIB TEST EXEC
-file(GLOB_RECURSE TEST_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp)
+file(GLOB_RECURSE TEST_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp
+)
 add_executable(EngineTest ${TEST_FILES})
 link_libraries(EngineTest engine)
 target_link_libraries(EngineTest engine)

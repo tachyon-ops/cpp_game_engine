@@ -1,7 +1,7 @@
 #ifndef ENGINE_TEXTUREMANAGER_H
 #define ENGINE_TEXTUREMANAGER_H
 
-#include "common.hpp"
+#include "../common.hpp"
 
 class TextureManager {
 public:

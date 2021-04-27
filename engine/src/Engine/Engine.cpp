@@ -4,7 +4,7 @@
 Engine *Engine::s_Instance = nullptr;
 
 bool Engine::Init(callback callback) {
-  printf("Engine Init!\n");
+  SDL_Log("Engine initializing!");
 
   if (SDL_Init(SDL_INIT_VIDEO) != 0) {
     SDL_Log("Failed to initialize SDL2: %s", SDL_GetError());
@@ -15,11 +15,9 @@ bool Engine::Init(callback callback) {
   int imgFlags = IMG_INIT_JPG | IMG_INIT_PNG;
   int initError = IMG_Init(imgFlags);
   if (initError == imgFlags) {
-    std::cout << "SDL_image initialized" << std::endl;
+    SDL_Log("Image system initialized!");
   } else {
-    std::cerr << "Failed to initialize SDL_image" << std::endl;
-    std::cerr << "Return value: " << initError << std::endl;
-    std::cerr << "Error flags: " << IMG_GetError() << std::endl;
+    SDL_Log("Failed to initialize SDL_image: %s", IMG_GetError());
     return m_IsRunning = false;
   }
 
@@ -27,7 +25,6 @@ bool Engine::Init(callback callback) {
       "Hello World!", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
       SCREEN_WIDTH, SCREEN_HEIGHT,
       SDL_WINDOW_METAL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIDDEN);
-
   if (m_Window == nullptr) {
     SDL_Log("Failed to create window: %s", SDL_GetError());
     return m_IsRunning = false;
@@ -35,7 +32,6 @@ bool Engine::Init(callback callback) {
 
   m_Renderer = SDL_CreateRenderer(
       m_Window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-
   if (m_Renderer == nullptr) {
     SDL_Log("Failed to create renderer: %s", SDL_GetError());
     return m_IsRunning = false;
@@ -45,6 +41,7 @@ bool Engine::Init(callback callback) {
   if (callback != nullptr)
     callback();
 
+  SDL_Log("Engine initialized!");
   return m_IsRunning = true;
 };
 
@@ -67,6 +64,11 @@ void Engine::Render(callback callback) {
     callback();
 
   SDL_RenderPresent(m_Renderer);
+
+  if (m_firstRun) {
+    Engine::GetInstance()->ShowWindow();
+    m_firstRun = false;
+  }
 };
 
 void Engine::Events() {
@@ -83,20 +85,27 @@ void Engine::Events() {
   SDL_Delay(16);
 };
 
-bool Engine::Clean() {
-  printf("Cleaning... ");
+bool Engine::Clean(callback callback) {
+  SDL_Log("Cleaning...");
+
+  // Callback
+  if (callback != nullptr)
+    callback();
+
+  TextureManager::GetInstance()->Clean();
+
   if (m_Renderer != nullptr) {
-    printf("m_Renderer->cleaned! ");
+    SDL_Log("m_Renderer->cleaned!");
     SDL_DestroyRenderer(m_Renderer);
   }
   if (m_Window != nullptr) {
-    printf("m_Window->cleaned! ");
+    SDL_Log("m_Window->cleaned!");
     SDL_DestroyWindow(m_Window);
   }
-  // IMG_Quit();
+  IMG_Quit();
   SDL_Quit();
-  printf("\nCleaning done!\n");
-  printf("Engine OUT!\n");
+  SDL_Log("Cleaning done!");
+  SDL_Log("Engine OUT!");
   return true;
 };
 
