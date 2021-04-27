@@ -1,12 +1,15 @@
-#ifndef ENGINE_H
-#define ENGINE_H
+#ifndef ENGINE_ENGINE_H
+#define ENGINE_ENGINE_H
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <stdlib.h>
+#include "common.hpp"
 
 #define SCREEN_WIDTH 960
 #define SCREEN_HEIGHT 640
+
+// i.e. f_void_t is a type:
+// function pointer taking one void argument, returning void
+typedef void (*callback)();
+// void callback(){};
 
 class Engine {
 public:
@@ -14,14 +17,14 @@ public:
     return s_Instance = (s_Instance != nullptr) ? s_Instance : new Engine();
   };
 
-  bool Init();
+  bool Init(callback f = nullptr);
   bool Clean();
   void Quit();
 
   void ShowWindow();
 
   void Update();
-  void Render();
+  void Render(callback f = nullptr);
   void Events();
 
   inline bool IsRunning() { return m_IsRunning; };

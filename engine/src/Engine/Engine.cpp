@@ -1,10 +1,10 @@
 #include "Engine.hpp"
+#include <stdlib.h>
 
-#include <iostream>
 
 Engine *Engine::s_Instance = nullptr;
 
-bool Engine::Init() {
+bool Engine::Init(callback callback) {
   printf("Engine Init!\n");
 
   if (SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -42,6 +42,9 @@ bool Engine::Init() {
     return m_IsRunning = false;
   }
 
+  // Init callback
+  if (callback != nullptr) callback();
+
   return m_IsRunning = true;
 };
 
@@ -55,9 +58,13 @@ void Engine::ShowWindow() {
     SDL_ShowWindow(m_Window);
 }
 
-void Engine::Render() {
+void Engine::Render(callback callback) {
   SDL_SetRenderDrawColor(m_Renderer, 255, 255, 255, 255);
   SDL_RenderClear(m_Renderer);
+
+  // Callback
+  if (callback != nullptr) callback();
+
   SDL_RenderPresent(m_Renderer);
 };
 

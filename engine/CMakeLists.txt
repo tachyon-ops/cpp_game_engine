@@ -1,5 +1,12 @@
 cmake_minimum_required(VERSION 3.20.1 FATAL_ERROR)
 
+# message("CMAKE_CXX_COMPILER_ID: ${CMAKE_CXX_COMPILER_ID}")
+# if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+#   set(CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS "${CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS} -undefined dynamic_lookup")
+# elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "AppleClang")
+#     set(CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS "${CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS} -undefined dynamic_lookup")
+# endif()
+
 project(engine)
 set(CMAKE_CXX_STANDARD 17)
 
@@ -16,15 +23,19 @@ STRING(REGEX REPLACE "/SDL2" "" SDL2_IMAGE_INCLUDE_DIR ${SDL2_IMAGE_INCLUDE_DIR}
 include_directories(${SDL2_IMAGE_INCLUDE_DIR})
 
 # Gather list of header and source files for compilation
-file(GLOB_RECURSE MAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/src/Engine.cpp)
-file(GLOB_RECURSE CPP_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/**/.cpp)
-file(GLOB_RECURSE HPP_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp ${CMAKE_CURRENT_SOURCE_DIR}/src/**/.hpp)
+file(GLOB_RECURSE TEST_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/testing.cpp)
+file(GLOB_RECURSE CPP_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/**/*.cpp)
+file(GLOB_RECURSE HPP_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp ${CMAKE_CURRENT_SOURCE_DIR}/src/**/*.hpp)
 
-set(ENGINE_INCLUDES ${CMAKE_CURRENT_LIST_DIR}/src/Engine.hpp)
+# MAIN LIB
+set(engineSource ${CMAKE_CURRENT_SOURCE_DIR}/src/Engine/Engine.cpp)
+set(texManSource ${CMAKE_CURRENT_SOURCE_DIR}/src/Engine/TextureManager.cpp)
 
-add_library(engine SHARED ${MAIN_FILE} ${CPP_FILES} ${HPP_FILES})
-
-target_link_libraries(engine ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARY})
+add_library(engine SHARED ${engineSource} ${texManSource})
+target_link_libraries(engine
+    ${SDL2_LIBRARIES}
+    ${SDL2_IMAGE_LIBRARY}
+)
 target_include_directories(engine PUBLIC ${HPP_FILES} ${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIR})
 
 set(SDL2_LIB_FILE ${SDL2_LIBRARY})
@@ -35,7 +46,6 @@ add_custom_command(
     TARGET engine POST_BUILD
     COMMAND mkdir -p ${LIB_OUT}
 )
-
 
 add_custom_command(
     TARGET engine POST_BUILD
@@ -59,6 +69,7 @@ add_custom_command(
 )
 
 
+
 get_directory_property(hasParent PARENT_DIRECTORY)
 if(hasParent)
     message(STATUS "Has a parent scope. ${LIB_OUT}")
@@ -71,6 +82,19 @@ endif()
 set(TESTING_SOURCE
     ${CMAKE_CURRENT_LIST_DIR}/src/testing.cpp
 )
-add_executable(EngineTest ${TESTING_SOURCE})
+add_executable(EngineTest ${TESTING_SOURCE} ${CPP_FILES})
 
-target_link_libraries(EngineTest engine)
+target_link_libraries(EngineTest
+    # engine
+    ${SDL2_LIBRARIES}
+    ${SDL2_IMAGE_LIBRARY}
+)
+
+# COPY TEST ASSETS
+file(GLOB_RECURSE ${CMAKE_CURRENT_LIST_DIR}/assets ${PROJECT_BINARY_DIR})
+add_custom_command(
+    TARGET EngineTest POST_BUILD
+    COMMAND cp -rf
+        ${CMAKE_CURRENT_LIST_DIR}/assets
+        ${PROJECT_BINARY_DIR}
+)
