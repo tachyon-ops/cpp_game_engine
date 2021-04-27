@@ -5,7 +5,7 @@ echo "Building Engine Lib"
 APP_NAME=engine
 
 # DEBUG=true
-MAIN_FILE="../src/testing.cpp"
+MAIN_FILE="../src/main.cpp"
 OSX_LD_FLAGS="-lsdl2 -framework Cocoa -framework Metal -lsdl2_image"
 
 # CPLUS_INCLUDE_PATH="${CPLUS_INCLUDE_PATH:+${CPLUS_INCLUDE_PATH}:}$VULKAN_SDK/include;/usr/local/include"
@@ -38,7 +38,7 @@ popd
 
 clang++ -dynamiclib $OSX_LD_FLAGS -o lib${APP_NAME}.dylib -I ../src $SOURCE_OBJECTS
 # clang++ -Wl,-undefined -Wl,dynamic_lookup -dynamiclib $OSX_LD_FLAGS -o lib${APP_NAME}.dylib -I ../src $SOURCE_OBJECTS
-clang++ -std=c++1z $DEBUG_MAIN $OSX_LD_FLAGS $MAIN_FILE -Iincludes -o ${APP_NAME} $SOURCE_OBJECTS
+clang++ -std=c++1z $DEBUG_MAIN $OSX_LD_FLAGS lib${APP_NAME}.dylib $MAIN_FILE -Iincludes -o ${APP_NAME} $SOURCE_OBJECTS
 popd
 
 echo Finished Building Handmade Hero

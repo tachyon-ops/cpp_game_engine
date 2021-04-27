@@ -1,7 +1,6 @@
 #include "Engine.hpp"
 #include <stdlib.h>
 
-
 Engine *Engine::s_Instance = nullptr;
 
 bool Engine::Init(callback callback) {
@@ -43,7 +42,8 @@ bool Engine::Init(callback callback) {
   }
 
   // Init callback
-  if (callback != nullptr) callback();
+  if (callback != nullptr)
+    callback();
 
   return m_IsRunning = true;
 };
@@ -63,7 +63,8 @@ void Engine::Render(callback callback) {
   SDL_RenderClear(m_Renderer);
 
   // Callback
-  if (callback != nullptr) callback();
+  if (callback != nullptr)
+    callback();
 
   SDL_RenderPresent(m_Renderer);
 };

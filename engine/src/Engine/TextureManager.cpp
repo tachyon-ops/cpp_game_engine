@@ -1,4 +1,7 @@
 #include "TextureManager.hpp"
+#include <stdlib.h>
+
+TextureManager *TextureManager::s_Instance = nullptr;
 
 bool TextureManager::Load(std::string id, std::string filename,
                           SDL_Renderer *renderer) {

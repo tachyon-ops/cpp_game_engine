@@ -23,53 +23,52 @@ STRING(REGEX REPLACE "/SDL2" "" SDL2_IMAGE_INCLUDE_DIR ${SDL2_IMAGE_INCLUDE_DIR}
 include_directories(${SDL2_IMAGE_INCLUDE_DIR})
 
 # Gather list of header and source files for compilation
-file(GLOB_RECURSE TEST_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/testing.cpp)
-file(GLOB_RECURSE CPP_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/**/*.cpp)
-file(GLOB_RECURSE HPP_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp ${CMAKE_CURRENT_SOURCE_DIR}/src/**/*.hpp)
+# file(GLOB_RECURSE CPP_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/**/*.cpp)
+# file(GLOB_RECURSE HPP_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp ${CMAKE_CURRENT_SOURCE_DIR}/src/**/*.hpp)
 
 # MAIN LIB
-set(engineSource ${CMAKE_CURRENT_SOURCE_DIR}/src/Engine/Engine.cpp)
-set(texManSource ${CMAKE_CURRENT_SOURCE_DIR}/src/Engine/TextureManager.cpp)
-
-add_library(engine SHARED ${engineSource} ${texManSource})
+add_library(engine SHARED
+    # ${CMAKE_CURRENT_SOURCE_DIR}/src/bla.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Engine/Engine.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Engine/TextureManager.cpp
+)
 target_link_libraries(engine
     ${SDL2_LIBRARIES}
     ${SDL2_IMAGE_LIBRARY}
 )
-target_include_directories(engine PUBLIC ${HPP_FILES} ${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIR})
 
-set(SDL2_LIB_FILE ${SDL2_LIBRARY})
-STRING(REGEX REPLACE "-framework Cocoa" "" SDL2_LIB_FILE ${SDL2_LIB_FILE})
+get_filename_component(PARENT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src DIRECTORY)
 
+target_include_directories(engine
+    PUBLIC ${HPP_FILES} ${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIR}
+    INTERFACE ${HPP_FILES}
+)
+# target_include_directories(engine PUBLIC ${HPP_FILES} ${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIR})
+
+# Create /bin
 set(LIB_OUT ${PROJECT_BINARY_DIR}/bin)
 add_custom_command(
     TARGET engine POST_BUILD
     COMMAND mkdir -p ${LIB_OUT}
 )
 
+# Copy relevant libs for future package
 add_custom_command(
     TARGET engine POST_BUILD
-    COMMAND install -C -m 775 -o $ENV{USER}
-        ${SDL2_IMAGE_LIBRARY}
-        ${LIB_OUT}
+    COMMAND install -C -m 775 -o $ENV{USER} ${SDL2_IMAGE_LIBRARY} ${LIB_OUT}
 )
-
+set(SDL2_LIB_FILE ${SDL2_LIBRARY})
+STRING(REGEX REPLACE "-framework Cocoa" "" SDL2_LIB_FILE ${SDL2_LIB_FILE})
 add_custom_command(
     TARGET engine POST_BUILD
-    COMMAND install -C -m 775 -o $ENV{USER}
-        ${SDL2_LIB_FILE}
-        ${LIB_OUT}
+    COMMAND install -C -m 775 -o $ENV{USER} ${SDL2_LIB_FILE} ${LIB_OUT}
 )
-
 add_custom_command(
     TARGET engine POST_BUILD
-    COMMAND install -C -m 775 -o $ENV{USER}
-        libengine.dylib
-        ${LIB_OUT}
+    COMMAND install -C -m 775 -o $ENV{USER} libengine.dylib ${LIB_OUT}
 )
 
-
-
+# SEND LIB PATH TO GLOBAL
 get_directory_property(hasParent PARENT_DIRECTORY)
 if(hasParent)
     message(STATUS "Has a parent scope. ${LIB_OUT}")
@@ -78,23 +77,13 @@ else()
   message(STATUS "Doesn't have a parent scope.")
 endif()
 
+# LIB TEST EXEC
+file(GLOB_RECURSE TEST_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp)
+add_executable(EngineTest ${TEST_FILES})
+link_libraries(EngineTest engine)
+target_link_libraries(EngineTest engine)
 
-set(TESTING_SOURCE
-    ${CMAKE_CURRENT_LIST_DIR}/src/testing.cpp
-)
-add_executable(EngineTest ${TESTING_SOURCE} ${CPP_FILES})
-
-target_link_libraries(EngineTest
-    # engine
-    ${SDL2_LIBRARIES}
-    ${SDL2_IMAGE_LIBRARY}
-)
-
-# COPY TEST ASSETS
-file(GLOB_RECURSE ${CMAKE_CURRENT_LIST_DIR}/assets ${PROJECT_BINARY_DIR})
 add_custom_command(
     TARGET EngineTest POST_BUILD
-    COMMAND cp -rf
-        ${CMAKE_CURRENT_LIST_DIR}/assets
-        ${PROJECT_BINARY_DIR}
+    COMMAND cp -rf ${CMAKE_CURRENT_LIST_DIR}/assets ${PROJECT_BINARY_DIR}
 )

@@ -18,7 +18,7 @@ public:
             SDL_Renderer *renderer, SDL_RendererFlip flip = SDL_FLIP_NONE);
 
 private:
-  TextureManager();
+  TextureManager(){};
 
   std::map<std::string, SDL_Texture *> m_TextureMap; // { id, *texture }
   static TextureManager *s_Instance;
