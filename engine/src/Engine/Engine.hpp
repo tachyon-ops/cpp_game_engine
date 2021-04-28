@@ -1,8 +1,8 @@
 #ifndef ENGINE_ENGINE_H
 #define ENGINE_ENGINE_H
 
-#include "common.hpp"
 #include "Graphics/TextureManager.hpp"
+#include "common.hpp"
 
 #define SCREEN_WIDTH 960
 #define SCREEN_HEIGHT 640
@@ -17,14 +17,15 @@ public:
     return s_Instance = (s_Instance != nullptr) ? s_Instance : new Engine();
   };
 
-  bool Init(callback f = nullptr);
-  bool Clean(callback f = nullptr);
+  bool Init(callback callback = nullptr);
+  bool Clean(callback callback = nullptr);
   void Quit();
 
   void ShowWindow();
 
-  void Update();
-  void Render(callback f = nullptr);
+  void Update(callback callback = nullptr);
+  void Render(callback callback = nullptr);
+  void SetRenderCallback(callback callback = nullptr);
   void Events();
 
   inline bool IsRunning() { return m_IsRunning; };
@@ -37,6 +38,8 @@ private:
     m_firstRun = true;
   };
 
+  static int ResizingEventWatcher(void *data, SDL_Event *event);
+
   bool m_IsRunning;
 
   SDL_Window *m_Window;
@@ -45,6 +48,7 @@ private:
   static Engine *s_Instance;
 
   bool m_firstRun;
+  callback m_render_callback;
 };
 
 #endif

@@ -74,6 +74,10 @@ endif()
 file(GLOB_RECURSE TEST_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Game/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Game/*.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Game/**/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Game/**/*.hpp
 )
 add_executable(EngineTest ${TEST_FILES})
 link_libraries(EngineTest engine)
