@@ -17,7 +17,7 @@ public:
     return s_Instance = (s_Instance != nullptr) ? s_Instance : new Engine();
   };
 
-  bool Init(callback callback = nullptr);
+  bool Init(std::string gameName = "My Game!", callback callback = nullptr);
   bool Clean(callback callback = nullptr);
   void Quit();
 

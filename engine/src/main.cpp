@@ -4,7 +4,6 @@
 
 int main(int argc, const char *argv[]) {
   printf("ENGINE TESTING!\n");
-
   Game::Run();
   return EXIT_SUCCESS;
 }

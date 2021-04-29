@@ -9,12 +9,12 @@ struct Properties {
 
   Properties(std::string textureID, int x, int y, int width, int height,
              SDL_RendererFlip flip = SDL_FLIP_NONE) {
+    TextureID = textureID;
     X = x;
     Y = y;
-    Flip = flip;
     Width = width;
     Height = height;
-    TextureID = textureID;
+    Flip = flip;
   }
 
 public:

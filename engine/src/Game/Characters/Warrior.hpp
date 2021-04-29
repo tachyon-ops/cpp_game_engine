@@ -3,6 +3,7 @@
 
 #include "../../Engine/Animation/Animation.hpp"
 #include "../../Engine/Entities/Character.hpp"
+#include "../../Engine/Physics/RigidBody.hpp"
 
 class Warrior : public Character {
 public:
@@ -14,6 +15,7 @@ public:
 
 private:
   Animation *m_Animation;
+  RigidBody *m_RigidBody;
 };
 
 #endif
