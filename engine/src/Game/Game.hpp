@@ -25,25 +25,22 @@ public:
   };
 
   static void Init() {
+    // Test();
     TextureManager::GetInstance()->Load("player",
                                         "assets/Martial Hero/Sprites/Idle.png");
     // TextureManager::GetInstance()->Load("tree", "assets/tree.png");
-    // https://youtu.be/m2MDcT89noE?t=1034
 
-    // Test();
   };
 
   static void Render() {
-    SDL_Log("Game::Render callback");
+    // SDL_Log("Game::Render callback");
     player->Draw();
     // TextureManager::GetInstance()->Draw("tree", 100, 100, 347, 465);
   };
 
   static void Update() {
-    SDL_Log("Game::Update callback, %s", player != nullptr ? "player exists" : "player doesnt exist");
-    if (player != nullptr) {
-      player->Update(0.0f);
-    }
+    // SDL_Log("Game::Update callback");
+    player->Update(0.0f);
   }
 };
 

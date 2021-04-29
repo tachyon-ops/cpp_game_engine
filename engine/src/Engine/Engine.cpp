@@ -64,9 +64,9 @@ bool Engine::Init(callback callback) {
 };
 
 void Engine::Update(callback callback) {
-  SDL_Log("Engine updating");
+  // SDL_Log("Engine updating");
   if (callback != nullptr) {
-    SDL_Log("Engine updating callback!");
+    // SDL_Log("Engine updating callback!");
     callback();
   }
 };
