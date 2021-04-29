@@ -1,4 +1,5 @@
 #include "Engine.hpp"
+#include "Inputs/Input.hpp"
 #include <stdlib.h>
 
 Engine *Engine::s_Instance = nullptr;
@@ -101,15 +102,7 @@ void Engine::Render(callback callback) {
 };
 
 void Engine::Events() {
-  SDL_Event event;
-  SDL_PollEvent(&event);
-  switch (event.type) {
-  case SDL_QUIT:
-    Quit();
-    break;
-  case SDL_WINDOWEVENT_RESIZED:
-    SDL_RenderClear(m_Renderer);
-  }
+  Input::GetInstance()->Listen();
 };
 
 bool Engine::Clean(callback callback) {

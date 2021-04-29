@@ -3,7 +3,6 @@
 
 #include "Vector2D.hpp"
 
-// https://youtu.be/pn9oL7mqj1g?t=703
 class Transform {
 public:
   float X, Y;

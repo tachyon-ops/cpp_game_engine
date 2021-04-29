@@ -13,7 +13,7 @@ void Warrior::Draw() {
 };
 
 void Warrior::Update(float dt) {
-  m_RigidBody->Update(0.1);
+  m_RigidBody->Update(0.4);
   // m_Transform->Log("WARRIOR VEC:");
   m_Transform->TranslateX(m_RigidBody->GetPosition().X);
   m_Transform->TranslateY(m_RigidBody->GetPosition().Y);

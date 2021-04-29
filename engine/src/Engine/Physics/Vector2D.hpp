@@ -2,8 +2,6 @@
 #define ENGINE_PHYSICS_VECTOR2D_H
 
 #include <iostream>
-
-// https://youtu.be/pn9oL7mqj1g?t=527
 class Vector2D {
 public:
   float X, Y;
