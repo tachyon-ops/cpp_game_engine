@@ -37,6 +37,13 @@ bool Engine::Init(std::string gameName, callback callback) {
     return m_IsRunning = false;
   }
 
+  if (TTF_Init() != 0) {
+    SDL_Log("Error initializing SDL_ttf: %s", TTF_GetError());
+    return m_IsRunning = false;
+  } else {
+    SDL_Log("Font system initialized!");
+  }
+
   m_Window = SDL_CreateWindow(
       gameName.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
       SCREEN_WIDTH, SCREEN_HEIGHT,
@@ -101,9 +108,7 @@ void Engine::Render(callback callback) {
   }
 };
 
-void Engine::Events() {
-  Input::GetInstance()->Listen();
-};
+void Engine::Events() { Input::GetInstance()->Listen(); };
 
 bool Engine::Clean(callback callback) {
   SDL_Log("Cleaning...");
@@ -122,6 +127,7 @@ bool Engine::Clean(callback callback) {
     SDL_Log("m_Window->cleaned!");
     SDL_DestroyWindow(m_Window);
   }
+  TTF_Quit();
   IMG_Quit();
   SDL_Quit();
   SDL_Log("Cleaning done!");

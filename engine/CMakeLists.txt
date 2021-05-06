@@ -8,7 +8,9 @@ cmake_minimum_required(VERSION 3.20.1 FATAL_ERROR)
 # endif()
 
 project(engine)
+set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Courtesy of https://trenki2.github.io/blog/2017/06/02/using-sdl2-with-cmake/
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
@@ -22,13 +24,17 @@ find_package(SDL2_Image REQUIRED)
 STRING(REGEX REPLACE "/SDL2" "" SDL2_IMAGE_INCLUDE_DIR ${SDL2_IMAGE_INCLUDE_DIR})
 include_directories(${SDL2_IMAGE_INCLUDE_DIR})
 
+find_package(SDL2_ttf REQUIRED)
+STRING(REGEX REPLACE "/SDL2" "" SDL2_TTF_INCLUDE_DIR ${SDL2_TTF_INCLUDE_DIR})
+include_directories(${SDL2_TTF_INCLUDE_DIR})
+
 # Gather list of header and source files for compilation
 file(GLOB_RECURSE CPP_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/**/*.cpp)
 file(GLOB_RECURSE HPP_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp ${CMAKE_CURRENT_SOURCE_DIR}/src/**/*.hpp)
 
 # MAIN LIB
 add_library(engine SHARED ${CPP_FILES})
-target_link_libraries(engine ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARY})
+target_link_libraries(engine ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARY} ${SDL2_TTF_LIBRARIES})
 
 get_filename_component(PARENT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src DIRECTORY)
 
@@ -46,6 +52,10 @@ add_custom_command(
 )
 
 # Copy relevant libs for future package
+add_custom_command(
+    TARGET engine POST_BUILD
+    COMMAND install -C -m 775 -o $ENV{USER} ${SDL2_TTF_LIBRARIES} ${LIB_OUT}
+)
 add_custom_command(
     TARGET engine POST_BUILD
     COMMAND install -C -m 775 -o $ENV{USER} ${SDL2_IMAGE_LIBRARY} ${LIB_OUT}
