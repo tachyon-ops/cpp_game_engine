@@ -29,8 +29,15 @@ STRING(REGEX REPLACE "/SDL2" "" SDL2_TTF_INCLUDE_DIR ${SDL2_TTF_INCLUDE_DIR})
 include_directories(${SDL2_TTF_INCLUDE_DIR})
 
 # Gather list of header and source files for compilation
-file(GLOB_RECURSE CPP_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/**/*.cpp)
-file(GLOB_RECURSE HPP_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp ${CMAKE_CURRENT_SOURCE_DIR}/src/**/*.hpp)
+file(GLOB_RECURSE CPP_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/**/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/ThirdParty/**/*.cpp
+)
+file(GLOB_RECURSE HPP_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/**/*.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/ThirdParty/**/*.hpp
+)
 
 # MAIN LIB
 add_library(engine SHARED ${CPP_FILES})

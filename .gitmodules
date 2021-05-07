@@ -1,0 +1,3 @@
+[submodule "engine/ThirdParty/tinyxml"]
+	path = engine/ThirdParty/tinyxml
+	url = git@github.com:vmayoral/tinyxml.git
