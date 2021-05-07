@@ -20,10 +20,31 @@ bool MapParser::Parse(std::string id, std::string source) {
   root->Attribute("height", &rowCount);
   root->Attribute("tileswidth", &tileSize);
 
-  // TODO: https://youtu.be/AZ2NRGdGppg
+  // Parse tilesets
+  TilesetList tilesets;
+  for (TiXmlElement *e = root->FirstChildElement(); e != nullptr;
+       e = e->NextSiblingElement()) {
+    if (e->Value() == std::string("tileset")) {
+      tilesets.push_back(ParseTileset(e));
+    }
+  }
+
+  // Parse Layers
+  GameMap *gamemap = new GameMap();
+  for (TiXmlElement *e = root->FirstChildElement(); e != nullptr;
+       e = e->NextSiblingElement()) {
+    if (e->Value() == std::string("layer")) {
+      TileLayer *tileLayer =
+          ParseTileLayer(e, tilesets, tileSize, rowCount, colCount);
+      gamemap->m_MapLayers.push_back(tileLayer);
+    }
+  }
+
+  m_MapDict[id] = gamemap;
+  return true;
 };
 
-Tileset MapParser::PaserTileset(TiXmlElement *xmlTileset) {
+Tileset MapParser::ParseTileset(TiXmlElement *xmlTileset) {
   Tileset tileset;
   tileset.Name = xmlTileset->Attribute("name");
   xmlTileset->Attribute("firstgid", &tileset.FirstID);
