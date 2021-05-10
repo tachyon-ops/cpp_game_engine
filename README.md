@@ -1,5 +1,9 @@
 #
 
+## iOS build
+
+cmake -DCMAKE_TOOLCHAIN_FILE=path/to/toolchain/iOS.cmake -GXcode
+
 ## TODO
 
 - Check if we can change TinyXML for TiCPP https://github.com/wxFormBuilder/ticpp

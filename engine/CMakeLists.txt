@@ -14,19 +14,23 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Courtesy of https://trenki2.github.io/blog/2017/06/02/using-sdl2-with-cmake/
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+
 find_package(SDL2 REQUIRED)
-find_library(SDL2_LIBRARY NAME SDL2 REQUIRED)
-STRING(REGEX REPLACE "/SDL2" "" SDL2_INCLUDE_DIRS ${SDL2_INCLUDE_DIRS})
-include_directories(${PROJ_NAME} ${SDL2_INCLUDE_DIRS})
-
-# Courtesy: https://stackoverflow.com/questions/37817717/sdl2-library-not-found-with-make-but-with-cmake
-find_package(SDL2_Image REQUIRED)
-STRING(REGEX REPLACE "/SDL2" "" SDL2_IMAGE_INCLUDE_DIR ${SDL2_IMAGE_INCLUDE_DIR})
-include_directories(${SDL2_IMAGE_INCLUDE_DIR})
-
+find_package(SDL2_image REQUIRED)
 find_package(SDL2_ttf REQUIRED)
-STRING(REGEX REPLACE "/SDL2" "" SDL2_TTF_INCLUDE_DIR ${SDL2_TTF_INCLUDE_DIR})
-include_directories(${SDL2_TTF_INCLUDE_DIR})
+# find_package(SDL2 REQUIRED)
+# find_library(SDL2_LIBRARY NAME SDL2 REQUIRED)
+# STRING(REGEX REPLACE "/SDL2" "" SDL2_INCLUDE_DIRS ${SDL2_INCLUDE_DIRS})
+# include_directories(${PROJ_NAME} ${SDL2_INCLUDE_DIRS})
+
+# # Courtesy: https://stackoverflow.com/questions/37817717/sdl2-library-not-found-with-make-but-with-cmake
+# find_package(SDL2_Image REQUIRED)
+# STRING(REGEX REPLACE "/SDL2" "" SDL2_IMAGE_INCLUDE_DIR ${SDL2_IMAGE_INCLUDE_DIR})
+# include_directories(${SDL2_IMAGE_INCLUDE_DIR})
+
+# find_package(SDL2_ttf REQUIRED)
+# STRING(REGEX REPLACE "/SDL2" "" SDL2_TTF_INCLUDE_DIR ${SDL2_TTF_INCLUDE_DIR})
+# include_directories(${SDL2_TTF_INCLUDE_DIR})
 
 # Gather list of header and source files for compilation
 file(GLOB_RECURSE CPP_FILES
@@ -41,42 +45,52 @@ file(GLOB_RECURSE HPP_FILES
 
 # MAIN LIB
 add_library(engine SHARED ${CPP_FILES})
-target_link_libraries(engine ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARY} ${SDL2_TTF_LIBRARIES})
+target_link_libraries(engine
+    # ${SDL2_LIBRARIES}
+    # ${SDL2_IMAGE_LIBRARY}
+    # ${SDL2_TTF_LIBRARIES}
+    SDL2::Main
+    SDL2::Image
+    SDL2::TTF
+)
 
 get_filename_component(PARENT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src DIRECTORY)
 
 target_include_directories(engine
-    PUBLIC ${HPP_FILES} ${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIR}
+    PUBLIC ${HPP_FILES}
+        ${SDL2_INCLUDE_DIRS}
+        ${SDL2_IMAGE_INCLUDE_DIR}
+        ${SDL2_TTF_INCLUDE_DIR}
     INTERFACE ${HPP_FILES}
 )
 # target_include_directories(engine PUBLIC ${HPP_FILES} ${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIR})
 
 # Create /bin
-set(LIB_OUT ${PROJECT_BINARY_DIR}/bin)
-add_custom_command(
-    TARGET engine POST_BUILD
-    COMMAND mkdir -p ${LIB_OUT}
-)
+# set(LIB_OUT ${PROJECT_BINARY_DIR}/bin)
+# add_custom_command(
+#     TARGET engine POST_BUILD
+#     COMMAND mkdir -p ${LIB_OUT}
+# )
 
-# Copy relevant libs for future package
-add_custom_command(
-    TARGET engine POST_BUILD
-    COMMAND install -C -m 775 -o $ENV{USER} ${SDL2_TTF_LIBRARIES} ${LIB_OUT}
-)
-add_custom_command(
-    TARGET engine POST_BUILD
-    COMMAND install -C -m 775 -o $ENV{USER} ${SDL2_IMAGE_LIBRARY} ${LIB_OUT}
-)
-set(SDL2_LIB_FILE ${SDL2_LIBRARY})
-STRING(REGEX REPLACE "-framework Cocoa" "" SDL2_LIB_FILE ${SDL2_LIB_FILE})
-add_custom_command(
-    TARGET engine POST_BUILD
-    COMMAND install -C -m 775 -o $ENV{USER} ${SDL2_LIB_FILE} ${LIB_OUT}
-)
-add_custom_command(
-    TARGET engine POST_BUILD
-    COMMAND install -C -m 775 -o $ENV{USER} libengine.dylib ${LIB_OUT}
-)
+# # Copy relevant libs for future package
+# add_custom_command(
+#     TARGET engine POST_BUILD
+#     COMMAND install -C -m 775 -o $ENV{USER} ${SDL2_TTF_LIBRARIES} ${LIB_OUT}
+# )
+# add_custom_command(
+#     TARGET engine POST_BUILD
+#     COMMAND install -C -m 775 -o $ENV{USER} ${SDL2_IMAGE_LIBRARY} ${LIB_OUT}
+# )
+# set(SDL2_LIB_FILE ${SDL2_LIBRARY})
+# STRING(REGEX REPLACE "-framework Cocoa" "" SDL2_LIB_FILE ${SDL2_LIB_FILE})
+# add_custom_command(
+#     TARGET engine POST_BUILD
+#     COMMAND install -C -m 775 -o $ENV{USER} ${SDL2_LIB_FILE} ${LIB_OUT}
+# )
+# add_custom_command(
+#     TARGET engine POST_BUILD
+#     COMMAND install -C -m 775 -o $ENV{USER} libengine.dylib ${LIB_OUT}
+# )
 
 # SEND LIB PATH TO GLOBAL
 get_directory_property(hasParent PARENT_DIRECTORY)
