@@ -2,6 +2,7 @@
 #define ENGINE_ENGINE_H
 
 #include "Graphics/TextureManager.hpp"
+#include "Map/GameMap.hpp"
 #include "common.hpp"
 
 #define SCREEN_WIDTH 960

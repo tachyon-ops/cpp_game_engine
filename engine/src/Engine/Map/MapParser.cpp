@@ -1,8 +1,8 @@
 #include "MapParser.hpp"
 
-MapParser *s_Instance = nullptr;
+MapParser *MapParser::s_Instance = nullptr;
 
-bool MapParser::Load() { return Parse("Level", "assets/maps/map_demo.tmx"); };
+bool MapParser::Load() { return Parse("MAP", "assets/maps/map_demo.tmx"); };
 
 bool MapParser::Parse(std::string id, std::string source) {
   TiXmlDocument xml;
@@ -80,8 +80,8 @@ TileLayer *MapParser::ParseTileLayer(TiXmlElement *xmlLayer,
 
   TileMap tileMap(rowCount, std::vector<int>(colCount, 0));
 
-  for (int row = 0; row == rowCount; row++) {
-    for (int col = 0; col == colCount; col++) {
+  for (int row = 0; row < rowCount; row++) {
+    for (int col = 0; col < colCount; col++) {
       getline(iss, id, ',');
       std::stringstream converter(id);
       converter >> tileMap[row][col];
@@ -96,5 +96,9 @@ TileLayer *MapParser::ParseTileLayer(TiXmlElement *xmlLayer,
 };
 
 void MapParser::Clean(){
-    //
+    std::map<std::string, GameMap*>::iterator it;
+    for (it = m_MapDict.begin(); it != m_MapDict.end(); it++) {
+      it->second = nullptr;
+    }
+    m_MapDict.clear();
 };

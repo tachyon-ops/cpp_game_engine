@@ -44,10 +44,12 @@ bool Engine::Init(std::string gameName, callback callback) {
     SDL_Log("Font system initialized!");
   }
 
-  m_Window = SDL_CreateWindow(
-      gameName.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-      SCREEN_WIDTH, SCREEN_HEIGHT,
-      SDL_WINDOW_METAL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIDDEN);
+  SDL_WindowFlags window_flags =
+      (SDL_WindowFlags)(SDL_WINDOW_METAL | SDL_WINDOW_RESIZABLE |
+                        SDL_WINDOW_HIDDEN | SDL_WINDOW_ALLOW_HIGHDPI);
+  m_Window = SDL_CreateWindow(gameName.c_str(), SDL_WINDOWPOS_CENTERED,
+                              SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH,
+                              SCREEN_HEIGHT, window_flags);
   if (m_Window == nullptr) {
     SDL_Log("Failed to create window: %s", SDL_GetError());
     return m_IsRunning = false;

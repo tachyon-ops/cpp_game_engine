@@ -10,7 +10,7 @@ cmake -DCMAKE_TOOLCHAIN_FILE=path/to/toolchain/iOS.cmake -GXcode
 
 ## Resources
 
-- // TODO: https://youtu.be/uOwUVmFNvNY
+- // TODO: https://www.youtube.com/watch?v=DeSIwhFzVYw&list=PL-K0viiuJ2RctP5nlJlqmHGeh66-GOZR_&index=18
 
 - https://medium.com/analytics-vidhya/building-a-game-engine-from-scratch-with-c-and-native-platform-languages-part-two-991618781c33
 
