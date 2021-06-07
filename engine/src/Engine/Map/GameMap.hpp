@@ -2,6 +2,8 @@
 #define ENGINE_MAP_GAMEMAP_H
 
 #include "Layer.hpp"
+#include <stdexcept>
+#include <stdio.h>
 #include <vector>
 
 class GameMap {
@@ -18,7 +20,16 @@ public:
     }
   };
 
-  std::vector<Layer *> GerMapLayers() { return m_MapLayers; };
+  std::vector<Layer *> GetMapLayers() { return m_MapLayers; };
+
+  Layer *GetLayerByName(std::string name) {
+    for (Layer *it : m_MapLayers) {
+      if (it->GetName() == name)
+        return it;
+    }
+    throw std::runtime_error(
+        std::string("GameMap::GetLayerByName() no layer with name ") + name);
+  };
 
 private:
   friend class MapParser;

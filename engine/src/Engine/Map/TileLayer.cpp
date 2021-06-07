@@ -2,10 +2,12 @@
 #include "../Graphics/TextureManager.hpp"
 
 TileLayer::TileLayer(int tileSize, int rowCount, int colCount, TileMap tileMap,
-                     TilesetList tilesets)
+                     TilesetList tilesets, std::string name)
     : m_TileSize(tileSize), m_RowCount(rowCount), m_ColCount(colCount),
-      m_TileMap(tileMap), m_Tilesets(tilesets) {
+      m_TileMap(tileMap), m_Tilesets(tilesets), Layer(name) {
+  // std::cout << " LAYER NAME: " << m_Name << std::endl;
   for (unsigned int i = 0; i < m_Tilesets.size(); i++) {
+    // std::cout << " NAME: " << m_Tilesets[i].Name << std::endl;
     TextureManager::GetInstance()->Load(m_Tilesets[i].Name,
                                         "assets/maps/" + m_Tilesets[i].Source);
   }

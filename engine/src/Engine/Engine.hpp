@@ -5,9 +5,6 @@
 #include "Map/GameMap.hpp"
 #include "common.hpp"
 
-#define SCREEN_WIDTH 960
-#define SCREEN_HEIGHT 640
-
 // i.e. f_void_t is a type:
 // function pointer taking one void argument, returning void
 typedef void (*callback)();

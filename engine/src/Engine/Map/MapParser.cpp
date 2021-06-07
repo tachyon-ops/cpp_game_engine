@@ -2,7 +2,9 @@
 
 MapParser *MapParser::s_Instance = nullptr;
 
-bool MapParser::Load() { return Parse("MAP", "assets/maps/map_demo.tmx"); };
+bool MapParser::Load(std::string id, std::string source) {
+  return Parse(id, source);
+};
 
 bool MapParser::Parse(std::string id, std::string source) {
   TiXmlDocument xml;
@@ -92,13 +94,14 @@ TileLayer *MapParser::ParseTileLayer(TiXmlElement *xmlLayer,
     }
   }
 
-  return new TileLayer(tileSize, rowCount, colCount, tileMap, tilesets);
+  return new TileLayer(tileSize, rowCount, colCount, tileMap, tilesets,
+                       xmlLayer->Attribute("name"));
 };
 
-void MapParser::Clean(){
-    std::map<std::string, GameMap*>::iterator it;
-    for (it = m_MapDict.begin(); it != m_MapDict.end(); it++) {
-      it->second = nullptr;
-    }
-    m_MapDict.clear();
+void MapParser::Clean() {
+  std::map<std::string, GameMap *>::iterator it;
+  for (it = m_MapDict.begin(); it != m_MapDict.end(); it++) {
+    it->second = nullptr;
+  }
+  m_MapDict.clear();
 };

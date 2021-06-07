@@ -20,7 +20,7 @@ using TileMap = std::vector<IntVectorType>; // < ------------|
 class TileLayer : public Layer {
 public:
   TileLayer(int tileSize, int rowCount, int colCount, TileMap tileMap,
-            TilesetList tilesets);
+            TilesetList tilesets, std::string name);
 
   virtual void Render();
   virtual void Update();
