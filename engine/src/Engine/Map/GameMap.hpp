@@ -24,8 +24,10 @@ public:
 
   Layer *GetLayerByName(std::string name) {
     for (Layer *it : m_MapLayers) {
-      if (it->GetName() == name)
+      if (it->GetName() == name) {
+        std::cout << "Layer with name " << name << " was found!" << std::endl;
         return it;
+      }
     }
     throw std::runtime_error(
         std::string("GameMap::GetLayerByName() no layer with name ") + name);

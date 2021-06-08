@@ -6,7 +6,7 @@ CollisionHandler::CollisionHandler() { m_CollisionLayer = nullptr; }
 
 void CollisionHandler::SetCollisionGameLayer(TileLayer *layer) {
   m_CollisionLayer = layer;
-  // m_CollisionTileMap = layer->GetTileMap();
+  m_CollisionTileMap = layer->GetTileMap();
 }
 
 bool CollisionHandler::CheckCollision(SDL_Rect a, SDL_Rect b) {
@@ -35,10 +35,11 @@ bool CollisionHandler::MapCollision(SDL_Rect a, int tileSize, int RowCount,
     if (bottom_tile > RowCount)
       bottom_tile = RowCount;
 
-    for (int i = left_tile; i <= right_tile; i++) {
-      for (int j = top_tile; j <= bottom_tile; j++) {
-        if (m_CollisionLayer->GetTileMap()[i][j] > 0)
+    for (int i = left_tile; i <= right_tile; ++i) {
+      for (int j = top_tile; j <= bottom_tile; ++j) {
+        if (m_CollisionTileMap[j][i] > 0) {
           return true;
+        }
       }
     }
   }

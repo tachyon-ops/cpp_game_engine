@@ -8,7 +8,7 @@
 #include <iostream>
 #include <vector>
 
-class Colider {
+class Collider {
 public:
   inline SDL_Rect Get() { return m_Box; };
   inline void SetBuffer(int x, int y, int w, int h) {

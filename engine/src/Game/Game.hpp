@@ -86,6 +86,6 @@ public:
 
 GameMap *Game::m_LevelMap = nullptr;
 Warrior *Game::player =
-    new Warrior(new Properties("player", 100, 200, 200, 200));
+    new Warrior(new Properties("player", 100, 100, 200, 200));
 
 #endif

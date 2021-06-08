@@ -10,7 +10,7 @@ cmake -DCMAKE_TOOLCHAIN_FILE=path/to/toolchain/iOS.cmake -GXcode
 
 ## Resources
 
-- https://youtu.be/DeSIwhFzVYw?list=PL-K0viiuJ2RctP5nlJlqmHGeh66-GOZR_&t=1496 
+- https://youtu.be/kha4zTr22kQ
 
 - // TODO: https://www.youtube.com/watch?v=DeSIwhFzVYw&list=PL-K0viiuJ2RctP5nlJlqmHGeh66-GOZR_&index=18
 

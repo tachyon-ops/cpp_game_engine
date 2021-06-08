@@ -9,6 +9,8 @@
 #include <stdlib.h>
 #include <string>
 
+// TODO: REMOVE ALL THIS!
+
 #define SCREEN_WIDTH 960
 #define SCREEN_HEIGHT 640
 

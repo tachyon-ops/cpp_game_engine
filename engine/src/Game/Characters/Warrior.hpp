@@ -4,7 +4,12 @@
 #include "../../Engine/Animation/Animation.hpp"
 #include "../../Engine/Entities/Character.hpp"
 #include "../../Engine/Physics/RigidBody.hpp"
+#include "../../Engine/Physics/Collider.hpp"
+#include "../../Engine/Physics/Vector2D.hpp"
 
+#define JUMP_TIME 15.0f
+#define JUMP_FORCE -10.0f
+#define RATIO 0.5f
 class Warrior : public Character {
 public:
   Warrior(Properties *props);
@@ -14,6 +19,15 @@ public:
   virtual void Clean();
 
 private:
+  bool m_IsJumping;
+  bool m_IsGrounded;
+
+  float m_JumpTime;
+  float m_JumpForce;
+
+  Collider* m_Collider;
+  Vector2D m_LastSafePosition;
+
   Animation *m_Animation;
   RigidBody *m_RigidBody;
 };
